@@ -2,15 +2,15 @@
 import secrets as sec 
 # API client library
 import googleapiclient.discovery
-import dateutil
-from numpy import minimum
+#Dataframe
 import pandas as pd
-
-
-# Data viz packages
-import seaborn as sns
+# Data visualization libraries
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
+import seaborn as sns
+
+
+
 
 
 # API key
@@ -48,7 +48,8 @@ def get_channel_stats(youtube, channel_ids):
         channel_data.append(data)
     
     return pd.DataFrame(channel_data)
-
+channel_data = get_channel_stats(youtube, channel_ids)
+print(channel_data)
 
 playlist_id = "PLWa4R2I19VH6mND1HUBeHJN1NMzi6VAFR"
 
@@ -92,7 +93,7 @@ def get_video_ids(youtube, playlist_id):
 video_ids = get_video_ids(youtube,playlist_id)
 #len(video_ids)
 
-
+#This video details is using the data from the get_video_ids fucntion 
 def get_video_details(youtube, video_ids):
  
     all_video_info = []
@@ -128,3 +129,30 @@ video_df = get_video_details(youtube, video_ids)
 print(video_df)
 
 
+def clean_data(channel_data):
+
+    # Change data type to numeric for columns that have numbers 
+    numeric_cols = ['subscribers', 'views', 'totalVideos']
+    channel_data[numeric_cols] = channel_data[numeric_cols].apply(pd.to_numeric, errors='coerce')
+
+    return (clean_data)
+clean_data(channel_data)
+
+
+#Subs for channel 
+sns.set(rc={'figure.figsize':(10,8)})
+ax = sns.barplot(x='channelName', y='subscribers', data=channel_data.sort_values('subscribers', ascending=False))
+ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:,.0f}'.format(x/1000) + 'K'))
+plot1 = ax.set_xticklabels(ax.get_xticklabels(),rotation = 90)
+plt.show()
+
+
+
+# Veiws for channel 
+ax = sns.barplot(x='channelName', y='views', data=channel_data.sort_values('views', ascending=False))
+ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: '{:,.0f}'.format(x/1000) + 'K'))
+plot = ax.set_xticklabels(ax.get_xticklabels(),rotation = 90)
+plt.show()
+
+# def comment_details():
+#     pass
