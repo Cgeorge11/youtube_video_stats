@@ -10,9 +10,6 @@ import matplotlib.ticker as ticker
 import seaborn as sns
 
 
-
-
-
 # API key
 DEVELOPER_KEY = sec.API_KEY
 # APP type
